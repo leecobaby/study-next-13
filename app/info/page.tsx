@@ -12,7 +12,7 @@ export default async function Page() {
   )
   const json2 = await res2.json()
 
-  // await Timer(10)
+  await Timer(10)
 
   return (
     <>
