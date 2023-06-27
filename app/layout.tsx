@@ -13,9 +13,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  let i = 0
+  i++
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <h1>{i}</h1>
+        {children}
+      </body>
     </html>
   )
 }
