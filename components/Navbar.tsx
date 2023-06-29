@@ -1,15 +1,22 @@
 'use client'
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import { styled } from 'styled-components'
+import { usePathname } from 'next/navigation'
+import { css, styled } from 'styled-components'
 
 export function Navbar() {
+  const pathname = usePathname()
+
   return (
     <Warp>
       <section className="logo">BLOG-C</section>
       <section className="link">
         {navs?.map(item => (
-          <Link key={item.label} href={item.harf}>
+          <Link
+            className={pathname === item.harf ? 'active' : ''}
+            key={item.label}
+            href={item.harf}
+          >
             {item.label}
           </Link>
         ))}
@@ -37,7 +44,7 @@ const navs = [
 
 const Warp = styled.div`
   height: 60px;
-  background-color: aqua;
+  background-color: #fff;
   border-bottom: 1px solid #f1f1f1;
   display: flex;
   align-items: center;
@@ -53,6 +60,11 @@ const Warp = styled.div`
     & > * {
       font-size: 18px;
       padding: 0 20px;
+      color: #515151;
     }
+  }
+
+  .active {
+    color: #2764f3;
   }
 `
