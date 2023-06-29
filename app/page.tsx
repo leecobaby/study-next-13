@@ -1,10 +1,8 @@
 'use client'
-import tw, { styled } from 'twin.macro'
+import { styled } from 'styled-components'
 // import type { NextPage } from 'next'
 
 const Container = styled.div`
-  ${tw`text-center text-red-600`}
-
   &:hover {
     color: #fff;
   }

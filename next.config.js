@@ -1,11 +1,11 @@
-const withTwin = require('./withTwin.js')
+// const withTwin = require('./withTwin.js')
 /**
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  // compiler: {
-  //   styledComponents: true,
-  // },
+  compiler: {
+    styledComponents: true,
+  },
 }
 
-module.exports = withTwin(nextConfig)
+module.exports = nextConfig

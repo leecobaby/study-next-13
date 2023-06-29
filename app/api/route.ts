@@ -1,5 +1,4 @@
 // import { NextResponse } from 'next/server'
-import { Libre_Franklin } from 'next/font/google';
 import { data } from "./mock";
 
 export async function GET() {
