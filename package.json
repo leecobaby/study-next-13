@@ -33,6 +33,7 @@
     "babel-loader": "^9.1.2",
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-styled-components": "^2.1.4",
+    "prettier": "^2.8.8",
     "twin.macro": "^3.3.0"
   }
 }
