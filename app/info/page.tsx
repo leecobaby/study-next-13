@@ -8,11 +8,11 @@ export default async function Page() {
   const res2 = await fetch(
     'https://worldtimeapi.org/api/timezone/Europe/London',
     // { cache: 'no-store' }
-    { next: { revalidate: 5 } }
+    { next: { revalidate: 10 } }
   )
   const json2 = await res2.json()
 
-  await Timer(10)
+  // await Timer(10)
 
   return (
     <>
