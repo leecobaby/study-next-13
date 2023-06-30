@@ -1,11 +1,28 @@
 'use client'
 import type { NextPage } from 'next'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { css, styled } from 'styled-components'
+import { Button } from 'antd'
+import { Login } from './Login'
 
 export function Navbar() {
   const pathname = usePathname()
+  const [isShowLogin, setIsShowLogin] = useState(false)
+
+  function handleGotoEditorPage() {
+    window.location.href = '/editor'
+  }
+
+  function handleLogin() {
+    isShowLogin ? setIsShowLogin(false) : setIsShowLogin(true)
+    window.location.href = '/login'
+  }
+
+  function handleCloseLogin() {
+    setIsShowLogin(false)
+  }
 
   return (
     <Warp>
@@ -21,6 +38,13 @@ export function Navbar() {
           </Link>
         ))}
       </section>
+      <section className="operation">
+        <Button onClick={handleGotoEditorPage}>文章</Button>
+        <Button type="primary" onClick={handleLogin}>
+          登录
+        </Button>
+      </section>
+      <Login isShow={isShowLogin} onClose={handleCloseLogin} />
     </Warp>
   )
 }
@@ -66,5 +90,12 @@ const Warp = styled.div`
 
   .active {
     color: #2764f3;
+  }
+
+  .operation {
+    margin-left: 150px;
+    button {
+      margin-right: 20px;
+    }
   }
 `
