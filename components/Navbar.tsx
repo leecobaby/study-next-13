@@ -17,7 +17,6 @@ export function Navbar() {
 
   function handleLogin() {
     isShowLogin ? setIsShowLogin(false) : setIsShowLogin(true)
-    window.location.href = '/login'
   }
 
   function handleCloseLogin() {
