@@ -1,6 +1,7 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
+import type { ChangeEvent } from 'react'
 
 interface LoginProps {
   isShow: boolean
@@ -9,6 +10,7 @@ interface LoginProps {
 
 export function Login(props: LoginProps) {
   const { isShow = false } = props
+  const [isShowVerifyCode, setIsShowVerifyCode] = useState(false)
   const [fromData, setFromData] = useState({
     phone: '',
     verify: '',
@@ -18,18 +20,24 @@ export function Login(props: LoginProps) {
     props.onClose()
   }
 
-  function handleGetVerifyCode() {}
+  function handleGetVerifyCode() {
+    setIsShowVerifyCode(true)
+  }
 
   function handleLogin() {}
 
   function handleOAuthGitHub() {}
 
-  function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFormChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
     setFromData({
       ...fromData,
       [name]: value,
     })
+  }
+
+  function handleCountDownEnd() {
+    setIsShowVerifyCode(false)
   }
 
   return isShow ? (
@@ -57,7 +65,11 @@ export function Login(props: LoginProps) {
             onChange={handleFormChange}
           />
           <span className="code" onClick={handleGetVerifyCode}>
-            获取验证码
+            {isShowVerifyCode ? (
+              <CountDown time={10} onEnd={handleCountDownEnd} />
+            ) : (
+              '获取验证码'
+            )}
           </span>
         </div>
         <div className="login_btn" onClick={handleLogin}>
@@ -75,6 +87,28 @@ export function Login(props: LoginProps) {
       </div>
     </Warp>
   ) : null
+}
+
+interface CountDownProps {
+  time: number
+  onEnd: () => void
+}
+
+function CountDown(props: CountDownProps) {
+  const { time = 30, onEnd } = props
+  const [count, setCount] = useState(time)
+
+  useEffect(() => {
+    if (count > 0) {
+      setTimeout(() => {
+        setCount(count - 1)
+      }, 1000)
+    } else {
+      onEnd()
+    }
+  })
+
+  return <CountDownWarp>{count}s</CountDownWarp>
 }
 
 /** style */
@@ -110,7 +144,7 @@ const Warp = styled.div`
     }
     input {
       width: 100%;
-      height: 32px;
+      height: 40px;
       border: 1px solid #ccc;
       border-radius: 4px;
       margin-bottom: 10px;
@@ -123,7 +157,7 @@ const Warp = styled.div`
         color: #1e80ff;
         position: absolute;
         right: 20px;
-        top: 6px;
+        top: 10px;
         font-size: 14px;
       }
     }
@@ -152,4 +186,7 @@ const Warp = styled.div`
       }
     }
   }
+`
+const CountDownWarp = styled.span`
+  color: #909090;
 `
