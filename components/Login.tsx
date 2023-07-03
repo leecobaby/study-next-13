@@ -25,18 +25,21 @@ export function Login(props: LoginProps) {
   function handleGetVerifyCode() {
     // setIsShowVerifyCode(true)
     if (!fromData.phone) {
-      message.warning('请输入手机号', 60)
+      message.warning('请输入手机号')
       return
     }
 
     request
-      .post('/api/user/sendVerifyCode', { phone: fromData.phone })
-      .then(res => {
+      .post('/api/user/sendVerifyCode', {
+        to: fromData.phone,
+        templateId: 1,
+      })
+      .then((res: any) => {
         if (res.code === 0) {
-          message.success('发送成功', 60)
+          message.success('发送成功')
           setIsShowVerifyCode(true)
         } else {
-          message.warning(res.msg, 60)
+          message.warning(res.msg || '未知错误')
         }
       })
   }

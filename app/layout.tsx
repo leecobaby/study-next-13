@@ -1,3 +1,4 @@
+'use client'
 import { Inter } from 'next/font/google'
 import { StyledComponentsRegistry } from '@/lib/registry'
 import { Navbar, Footer } from '@/components'
