@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
+import { message } from 'antd'
+import { request } from '@/service'
 import type { ChangeEvent } from 'react'
 
 interface LoginProps {
@@ -21,7 +23,22 @@ export function Login(props: LoginProps) {
   }
 
   function handleGetVerifyCode() {
-    setIsShowVerifyCode(true)
+    // setIsShowVerifyCode(true)
+    if (!fromData.phone) {
+      message.warning('请输入手机号', 60)
+      return
+    }
+
+    request
+      .post('/api/user/sendVerifyCode', { phone: fromData.phone })
+      .then(res => {
+        if (res.code === 0) {
+          message.success('发送成功', 60)
+          setIsShowVerifyCode(true)
+        } else {
+          message.warning(res.msg, 60)
+        }
+      })
   }
 
   function handleLogin() {}
