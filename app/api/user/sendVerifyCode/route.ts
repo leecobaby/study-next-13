@@ -1,9 +1,9 @@
 import md5 from 'md5'
 import { format } from 'date-fns'
-import { NextResponse } from 'next/server';
-import { IronSession } from 'iron-session'
+import { NextResponse, NextRequest } from 'next/server';
 import { request } from '@/service'
 import { randStr } from '@/lib/utils'
+import { getSession, createResponse } from "@/lib/session";
 
 const {
   BaseURL,
@@ -13,7 +13,28 @@ const {
   TemplateId
 } = process.env
 
-export async function POST(req: Request) {
+
+// export async function POST(request: NextRequest) {
+//   const response = new Response();
+//   const session = await getSession(request, response);
+
+//   session.user = {
+//     id: 1,
+//     name: "Leeco",
+//   };
+
+//   await session.save();
+
+//   return createResponse(
+//     response,
+//     JSON.stringify({ message: 'User created' })
+//   );
+// }
+
+export async function POST(req: NextRequest) {
+  const res = new Response();
+  const session = await getSession(req, res);
+
   const { to = '', templateId = TemplateId } = await req.json();
   const NowDate = format(new Date(), 'yyyyMMddHHmmss')
   console.log(NowDate)
@@ -24,17 +45,36 @@ export async function POST(req: Request) {
   const verifyCode = randStr(4)
   const expireMinute = 5
   console.log(url)
-  const res = await request.post(url, { to, templateId, appId: AppId, datas: [verifyCode, expireMinute] }, {
+  const data = await request.post(url, { to, templateId, appId: AppId, datas: [verifyCode, expireMinute] }, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json;charset=utf-8',
       Authorization
     }
   });
-  console.log(res)
-  return NextResponse.json({
-    code: 0,
-    msg: 'success',
-    data: '1232'
-  })
+  console.log(data)
+
+  const { statusCode, templateSMS, statusMsg } = data as any
+
+  if (statusCode === '000000') {
+    return createResponse(
+      res,
+      JSON.stringify({
+        code: 0,
+        msg: statusMsg,
+        data: {
+          templateSMS
+        }
+      })
+    );
+  } else {
+    return createResponse(
+      res,
+      JSON.stringify({
+        code: -1,
+        msg: statusMsg,
+        data: null
+      })
+    )
+  }
 }
