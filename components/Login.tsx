@@ -44,7 +44,16 @@ export function Login(props: LoginProps) {
       })
   }
 
-  function handleLogin() {}
+  function handleLogin() {
+    request.post('/api/user/login', { ...fromData }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('登录成功')
+        props.onClose()
+      } else {
+        message.error(res.msg || '未知错误')
+      }
+    })
+  }
 
   function handleOAuthGitHub() {}
 

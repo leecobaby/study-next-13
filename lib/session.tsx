@@ -6,6 +6,7 @@ export interface Data {
     id: number
     name: string
   }
+  verifyCode?: string
 }
 
 export const getSession = (req: Request, res: Response) => {
