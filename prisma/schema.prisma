@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model forum_users {
+  id        Int     @id @default(autoincrement())
+  nickname  String? @db.VarChar(255)
+  avatar    String? @db.VarChar(255)
+  job       String? @db.VarChar(255)
+  introduce String? @db.VarChar(255)
+}
+
+model forum_user_auths {
+  id            Int     @id @default(autoincrement())
+  user_id       Int?
+  identity_type String? @db.VarChar(255)
+  identifier    String? @db.VarChar(255)
+  credential    String? @db.VarChar(255)
+}

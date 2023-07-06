@@ -1,3 +1,13 @@
+## Technology Stack
+
+- [Next.js - App Dir](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [styled-components](https://styled-components.com/)
+- [next-auth](https://next-auth.js.org/)
+- [prisma](https://www.prisma.io/)
+- [MySQL](https://www.mysql.com/)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

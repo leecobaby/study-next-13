@@ -2,7 +2,8 @@ import axios from 'axios';
 
 export const requestInstance = axios.create({
   baseURL: '.',
-});
+  timeout: 60 * 1000,
+},);
 
 requestInstance.interceptors.request.use(config => config, error => Promise.reject(error));
 
