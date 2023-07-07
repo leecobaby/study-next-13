@@ -19,10 +19,8 @@ export async function POST(req: NextRequest) {
 
   const { to = '', templateId = TemplateId } = await req.json();
   const NowDate = format(new Date(), 'yyyyMMddHHmmss')
-  console.log(NowDate)
   const SigParameter = md5(`${AccountId}${AuthToken}${NowDate}`).toUpperCase()
   const Authorization = Buffer.from(`${AccountId}:${NowDate}`).toString('base64')
-  console.log(Authorization)
   const url = `${BaseURL}/2013-12-26/Accounts/${AccountId}/SMS/TemplateSMS?sig=${SigParameter}`
   const verifyCode = randStr(4)
   console.log(verifyCode)

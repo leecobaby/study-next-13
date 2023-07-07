@@ -4,8 +4,11 @@ import { sessionOptions } from '@/config'
 export interface Data {
   user?: {
     id: number
-    name: string
-  }
+    nickname: string | null
+    avatar: string | null
+    job: string | null
+    introduce: string | null
+  } & null
   verifyCode?: string
 }
 
