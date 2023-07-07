@@ -9,15 +9,7 @@ let i = 0
 export async function POST(req: Request) {
   const res = new Response();
   const session = await getSession(req, res);
-
-  const result = await prisma.forum_users.create({
-    data: {
-      nickname: 'leeco',
-    }
-  })
   console.log(i++)
-  console.log(result)
-
 
   const { phone = '', verify = '', identity_type } = await req.json();
   console.log(phone, verify)
@@ -26,7 +18,8 @@ export async function POST(req: Request) {
     const userAuth = await prisma.forum_user_auths.findFirst({
       where: {
         identity_type,
-        identifier: phone
+        identifier: phone,
+        credential: verify
       },
       include: {
         forum_users: true
@@ -64,22 +57,14 @@ export async function POST(req: Request) {
 
       return createResponse(
         res,
-        JSON.stringify({ code: 0, msg: '创建并登录成功', data: { phone, verify } })
+        JSON.stringify({ code: 0, msg: '创建并登录成功', data: user })
       );
     }
+  } else {
+    await session.destroy();
+    return createResponse(
+      res,
+      JSON.stringify({ code: -1, msg: '验证码错误', data: null })
+    );
   }
-
-  // session.user = {
-  //   id: 1,
-  //   name: "Leeco",
-  // };
-
-  // await session.save();
-
-  // return createResponse(
-  //   res,
-  //   JSON.stringify({ code: 0, msg: '登录成功', data: { phone, verifyCode } })
-  // );
-
-  return NextResponse.json({ code: 0, msg: '登录成功', data: { phone, verify } })
 }

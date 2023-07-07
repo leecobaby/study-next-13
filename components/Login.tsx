@@ -49,7 +49,7 @@ export function Login(props: LoginProps) {
       .post('/api/user/login', { ...fromData, identity_type: 'phone' })
       .then((res: any) => {
         if (res.code === 0) {
-          message.success('登录成功')
+          message.success(res.msg || '登录成功')
           props.onClose()
         } else {
           message.error(res.msg || '未知错误')

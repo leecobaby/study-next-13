@@ -37,9 +37,14 @@ export async function POST(req: NextRequest) {
 
   const { statusCode, templateSMS, statusMsg } = data as any
 
+  // 开发环境下请注释掉下面两行
+  session.verifyCode = verifyCode
+  await session.save();
+
   if (statusCode === '000000') {
-    session.verifyCode = verifyCode
-    await session.save();
+    // 生产环境下去掉注释
+    // session.verifyCode = verifyCode
+    // await session.save();
 
     return createResponse(
       res,
