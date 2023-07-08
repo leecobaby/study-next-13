@@ -6,8 +6,8 @@ import { getSession, createResponse } from "@/lib/session";
 
 let i = 0
 
-export async function POST(req: Request) {
-  const res = new Response();
+export async function POST(req: NextRequest) {
+  const res = new NextResponse();
   const session = await getSession(req, res);
   console.log(i++)
 
@@ -30,6 +30,11 @@ export async function POST(req: Request) {
       // 有记录，直接登录
       session.user = userAuth.forum_users as any;
       await session.save();
+      res.cookies.set('user', JSON.stringify(session.user), {
+        httpOnly: true,
+        path: '/',
+        maxAge: 60 * 60 * 24
+      });
 
       return createResponse(
         res,
@@ -54,6 +59,11 @@ export async function POST(req: Request) {
 
       session.user = user as any;
       await session.save();
+      res.cookies.set('user', JSON.stringify(session.user), {
+        httpOnly: true,
+        path: '/',
+        maxAge: 60 * 60 * 24
+      });
 
       return createResponse(
         res,
@@ -62,6 +72,12 @@ export async function POST(req: Request) {
     }
   } else {
     await session.destroy();
+    res.cookies.set('user', '', {
+      httpOnly: true,
+      path: '/',
+      maxAge: 0
+    });
+
     return createResponse(
       res,
       JSON.stringify({ code: -1, msg: '验证码错误', data: null })

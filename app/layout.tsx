@@ -1,6 +1,6 @@
-'use client'
 import { Inter } from 'next/font/google'
 import { StyledComponentsRegistry } from '@/lib/registry'
+import { Cookies } from '@/lib/cookies'
 import { Navbar, Footer } from '@/components'
 import './globals.css'
 
@@ -24,6 +24,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </StyledComponentsRegistry>
+        <Cookies />
       </body>
     </html>
   )

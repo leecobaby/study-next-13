@@ -8,7 +8,7 @@ const Container = styled.div`
   }
 `
 
-export default function Home() {
+export default function Page() {
   return (
     <>
       <Container>Home</Container>

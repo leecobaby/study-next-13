@@ -1,7 +1,11 @@
+'use client'
+import { Text } from './components/Text'
+
 export default function Page() {
   return (
     <>
-      <div>标签管理页</div>
+      <Text />
+      <div>Tag Manager</div>
     </>
   )
 }
