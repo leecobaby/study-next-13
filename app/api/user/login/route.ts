@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         }
       })
 
-      session.user = user as any;
+      session.user = { ...user, userId: user.id };
       await session.save();
       res.cookies.set('user', JSON.stringify(session.user), {
         httpOnly: true,

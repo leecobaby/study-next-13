@@ -1,14 +1,17 @@
 'use client'
-import type { NextPage } from 'next'
-import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { Button, Menu, Dropdown, Avatar } from 'antd'
 import { css, styled } from 'styled-components'
-import { Button } from 'antd'
+import { redirect, usePathname } from 'next/navigation'
+import { LoginOutlined, HomeOutlined } from '@ant-design/icons'
+import { request } from '@/service'
+import { ISessionData } from '@/lib/session'
 import { Login } from './Login'
 
-export function Navbar() {
+export async function Navbar({ session }: { session: ISessionData }) {
   const pathname = usePathname()
+  const { userId, avatar } = session?.user || {}
   const [isShowLogin, setIsShowLogin] = useState(false)
 
   function handleGotoEditorPage() {
@@ -21,6 +24,33 @@ export function Navbar() {
 
   function handleCloseLogin() {
     setIsShowLogin(false)
+  }
+
+  function handleGotoPersonalPage() {
+    window.location.href = '/user'
+  }
+
+  function handleLogout() {
+    request.post('/api/user/logout').then((res: any) => {
+      if (res?.code === 0) {
+        redirect('/')
+      }
+    })
+  }
+
+  function renderDropDownMenu() {
+    return (
+      <Menu>
+        <Menu.Item onClick={handleGotoPersonalPage}>
+          <HomeOutlined />
+          &nbsp; 个人主页
+        </Menu.Item>
+        <Menu.Item onClick={handleLogout}>
+          <LoginOutlined />
+          &nbsp; 退出系统
+        </Menu.Item>
+      </Menu>
+    )
   }
 
   return (
@@ -38,10 +68,19 @@ export function Navbar() {
         ))}
       </section>
       <section className="operation">
-        <Button onClick={handleGotoEditorPage}>文章</Button>
-        <Button type="primary" onClick={handleLogin}>
-          登录
-        </Button>
+        <Button onClick={handleGotoEditorPage}>写文章</Button>
+
+        {userId ? (
+          <>
+            <Dropdown overlay={renderDropDownMenu()} placement="bottomLeft">
+              <Avatar src={avatar} size={32} />
+            </Dropdown>
+          </>
+        ) : (
+          <Button type="primary" onClick={handleLogin}>
+            登录
+          </Button>
+        )}
       </section>
       <Login isShow={isShowLogin} onClose={handleCloseLogin} />
     </Warp>
