@@ -41,4 +41,12 @@ export function getServerSession() {
   return session
 }
 
+export async function getStaticSession() {
+  const session = await getServerSession()
+  // 序列化去掉函数
+  const staticSession = { ...session }
+
+  return staticSession as Data
+}
+
 export { createResponse }

@@ -28,13 +28,15 @@ export async function POST(req: NextRequest) {
 
     if (userAuth) {
       // 有记录，直接登录
-      session.user = userAuth.forum_users as any;
+      const user = userAuth.forum_users!;
+      session.user = { ...user, userId: user.id };
       await session.save();
-      res.cookies.set('user', JSON.stringify(session.user), {
-        httpOnly: true,
-        path: '/',
-        maxAge: 60 * 60 * 24
-      });
+      console.log(session.user)
+      // res.cookies.set('user', JSON.stringify(session.user), {
+      //   httpOnly: true,
+      //   path: '/',
+      //   maxAge: 60 * 60 * 24
+      // });
 
       return createResponse(
         res,
@@ -59,11 +61,11 @@ export async function POST(req: NextRequest) {
 
       session.user = { ...user, userId: user.id };
       await session.save();
-      res.cookies.set('user', JSON.stringify(session.user), {
-        httpOnly: true,
-        path: '/',
-        maxAge: 60 * 60 * 24
-      });
+      // res.cookies.set('user', JSON.stringify(session.user), {
+      //   httpOnly: true,
+      //   path: '/',
+      //   maxAge: 60 * 60 * 24
+      // });
 
       return createResponse(
         res,
@@ -72,11 +74,11 @@ export async function POST(req: NextRequest) {
     }
   } else {
     await session.destroy();
-    res.cookies.set('user', '', {
-      httpOnly: true,
-      path: '/',
-      maxAge: 0
-    });
+    // res.cookies.set('user', '', {
+    //   httpOnly: true,
+    //   path: '/',
+    //   maxAge: 0
+    // });
 
     return createResponse(
       res,

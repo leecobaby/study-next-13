@@ -6,13 +6,14 @@ import { css, styled } from 'styled-components'
 import { redirect, usePathname } from 'next/navigation'
 import { LoginOutlined, HomeOutlined } from '@ant-design/icons'
 import { request } from '@/service'
-import { ISessionData } from '@/lib/session'
+import { Data } from '@/lib/session'
 import { Login } from './Login'
 
-export async function Navbar({ session }: { session: ISessionData }) {
+export function Navbar({ session }: { session: Data }) {
   const pathname = usePathname()
   const { userId, avatar } = session?.user || {}
   const [isShowLogin, setIsShowLogin] = useState(false)
+  console.log('session', session)
 
   function handleGotoEditorPage() {
     window.location.href = '/editor'
