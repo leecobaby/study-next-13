@@ -1,8 +1,8 @@
 import { getIronSession, createResponse } from 'iron-session'
 import { sessionOptions } from '@/config'
-import { cookies, headers } from 'next/headers'
-import { NextRequest } from 'next/server'
+// import { cookies, headers } from 'next/headers'
 import type { IronSession } from 'iron-session'
+import React from 'react'
 
 export interface Data {
   user?: {
@@ -22,24 +22,46 @@ export function getSession(req: Request, res: Response) {
   return session
 }
 
-export async function getServerSession() {
-  const req = {
-    headers: Object.fromEntries(headers() as Headers),
-    cookies: Object.fromEntries(
-      cookies()
-        .getAll()
-        .map(c => [c.name, c.value])
-    ),
-  }
-  const res = {
-    getHeader: headers().get,
-    setCookie: cookies().set,
-    setHeader: headers().set,
-  }
-  // @ts-ignore
-  const session = await getSession(req, res)
-  // 序列化去掉函数
-  return { ...session }
+// export async function getServerSession() {
+//   const req = {
+//     headers: Object.fromEntries(headers() as Headers),
+//     cookies: Object.fromEntries(
+//       cookies()
+//         .getAll()
+//         .map(c => [c.name, c.value])
+//     ),
+//   }
+//   const res = {
+//     getHeader: headers().get,
+//     setCookie: cookies().set,
+//     setHeader: headers().set,
+//   }
+//   // @ts-ignore
+//   const session = await getSession(req, res)
+//   // 序列化去掉函数
+//   return { ...session }
+// }
+
+export async function fetchSession() {
+  const data = await fetch('/api/session')
+  const session = await data.json()
+  return session as Data
+}
+
+export function useSession() {
+  const [session, setSession] = React.useState<Data>()
+  React.useEffect(() => {
+    fetchSession().then(session => {
+      // 判断是否与当前session一致，不一致则更新
+      setSession(prev => {
+        if (prev?.user?.userId !== session?.user?.userId) {
+          return session
+        }
+        return prev
+      })
+    })
+  }, [])
+  return session
 }
 
 export { createResponse }

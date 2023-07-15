@@ -1,15 +1,15 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
-import { Button, Menu, Dropdown, Avatar } from 'antd'
-import { css, styled } from 'styled-components'
-import { useRouter, usePathname } from 'next/navigation'
+import { Button, Menu, Dropdown, Avatar, message } from 'antd'
+import { styled } from 'styled-components'
+import { usePathname, useRouter } from 'next/navigation'
 import { LoginOutlined, HomeOutlined } from '@ant-design/icons'
 import { request } from '@/service'
 import { Data } from '@/lib/session'
 import { Login } from './Login'
 
-export function Navbar({ session }: { session: Data }) {
+export function Navbar({ session }: { session?: Data }) {
   const pathname = usePathname()
   const router = useRouter()
   const { userId, avatar } = session?.user || {}
@@ -17,7 +17,11 @@ export function Navbar({ session }: { session: Data }) {
   console.log('session', session)
 
   function handleGotoEditorPage() {
-    window.location.href = '/editor'
+    if (userId) {
+      router.push('/editor')
+    } else {
+      message.warning('请先登录')
+    }
   }
 
   function handleLogin() {
@@ -29,7 +33,7 @@ export function Navbar({ session }: { session: Data }) {
   }
 
   function handleGotoPersonalPage() {
-    window.location.href = '/user'
+    router.push(`/user/${userId}`)
   }
 
   function handleLogout() {

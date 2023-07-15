@@ -1,7 +1,6 @@
 import { Inter } from 'next/font/google'
-import { Data, getServerSession } from '@/lib/session'
 import { StyledComponentsRegistry } from '@/lib/registry'
-import { Navbar, Footer } from '@/components'
+import { LayoutProvider } from './LayoutProvider'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,14 +15,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession()
   return (
     <html lang="en">
       <body className={inter.className}>
         <StyledComponentsRegistry>
-          <Navbar session={session} />
-          {children}
-          <Footer />
+          <LayoutProvider>{children}</LayoutProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
