@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google'
-import { Data, getStaticSession } from '@/lib/session'
+import { Data, getServerSession } from '@/lib/session'
 import { StyledComponentsRegistry } from '@/lib/registry'
 import { Navbar, Footer } from '@/components'
 import './globals.css'
@@ -16,7 +16,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getStaticSession()
+  const session = await getServerSession()
   return (
     <html lang="en">
       <body className={inter.className}>

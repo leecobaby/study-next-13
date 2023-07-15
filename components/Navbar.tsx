@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Button, Menu, Dropdown, Avatar } from 'antd'
 import { css, styled } from 'styled-components'
-import { redirect, usePathname } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { LoginOutlined, HomeOutlined } from '@ant-design/icons'
 import { request } from '@/service'
 import { Data } from '@/lib/session'
@@ -11,6 +11,7 @@ import { Login } from './Login'
 
 export function Navbar({ session }: { session: Data }) {
   const pathname = usePathname()
+  const router = useRouter()
   const { userId, avatar } = session?.user || {}
   const [isShowLogin, setIsShowLogin] = useState(false)
   console.log('session', session)
@@ -34,7 +35,7 @@ export function Navbar({ session }: { session: Data }) {
   function handleLogout() {
     request.post('/api/user/logout').then((res: any) => {
       if (res?.code === 0) {
-        redirect('/')
+        window.location.replace('/')
       }
     })
   }

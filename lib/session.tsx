@@ -22,7 +22,7 @@ export function getSession(req: Request, res: Response) {
   return session
 }
 
-export function getServerSession() {
+export async function getServerSession() {
   const req = {
     headers: Object.fromEntries(headers() as Headers),
     cookies: Object.fromEntries(
@@ -37,16 +37,9 @@ export function getServerSession() {
     setHeader: headers().set,
   }
   // @ts-ignore
-  const session = getSession(req, res)
-  return session
-}
-
-export async function getStaticSession() {
-  const session = await getServerSession()
+  const session = await getSession(req, res)
   // 序列化去掉函数
-  const staticSession = { ...session }
-
-  return staticSession as Data
+  return { ...session }
 }
 
 export { createResponse }
