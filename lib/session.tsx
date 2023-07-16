@@ -52,13 +52,7 @@ export function useSession() {
   const [session, setSession] = React.useState<Data>()
   React.useEffect(() => {
     fetchSession().then(session => {
-      // 判断是否与当前session一致，不一致则更新
-      setSession(prev => {
-        if (prev?.user?.userId !== session?.user?.userId) {
-          return session
-        }
-        return prev
-      })
+      setSession(session)
     })
   }, [])
   return session

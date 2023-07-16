@@ -1,8 +1,9 @@
 'use client'
-import { type ChangeEvent, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { Input, Button } from 'antd'
 import { styled } from 'styled-components'
+import { Input, Button, message } from 'antd'
+import { type ChangeEvent, useState } from 'react'
+import { request } from '@/service'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 
@@ -14,6 +15,23 @@ export default function Page() {
 
   function handlePulish() {
     console.log('value', content)
+    if (!title) {
+      message.warning('请输入文章标题')
+      return
+    }
+    request
+      .post('/api/article/publish', {
+        title,
+        content,
+      })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          // todo 跳转
+          message.success('发布成功')
+        } else {
+          message.error(res?.msg || '发布失败')
+        }
+      })
   }
 
   function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
