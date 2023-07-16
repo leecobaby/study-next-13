@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'
 import { getSession, createResponse } from '@/lib/session'
+import { EXCEPTION_ARTICLE } from '@/config'
 
-async function handler(req: NextRequest) {
+export async function POST(req: NextRequest) {
   const res = new NextResponse()
   const session = await getSession(req, res)
   const { title = '', content = '' } = await req.json()
@@ -21,7 +22,10 @@ async function handler(req: NextRequest) {
       },
     }
   })
-  return createResponse(res, JSON.stringify(session))
+  console.log(article)
+  if (!article) {
+    return createResponse(res, JSON.stringify({ ...EXCEPTION_ARTICLE.PUBLIC_FAIL }))
+  } else {
+    return createResponse(res, JSON.stringify({ code: 0, data: article, msg: '发布成功' }))
+  }
 }
-
-export { handler as GET, handler as POST }

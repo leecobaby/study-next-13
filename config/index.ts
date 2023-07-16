@@ -5,3 +5,14 @@ export const sessionOptions = {
     secure: process.env.NODE_ENV === 'production',
   },
 }
+
+export const EXCEPTION_USER = {
+
+}
+
+export const EXCEPTION_ARTICLE = {
+  PUBLIC_FAIL: {
+    code: 2001,
+    msg: '发布文章失败'
+  }
+}
