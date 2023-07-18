@@ -1,17 +1,20 @@
-'use client'
-import { styled } from 'styled-components'
-// import type { NextPage } from 'next'
+import { prisma } from '@/lib/prisma'
+import { ListItem } from '@/components/ListItem'
 
-const Container = styled.div`
-  &:hover {
-    color: #fff;
-  }
-`
-
-export default function Page() {
+export default async function Page() {
+  const articles = await prisma.article.findMany({
+    include: {
+      user: true,
+    },
+  })
+  console.log('articles', articles)
   return (
     <>
-      <Container>Home</Container>
+      <div>
+        {articles?.map(article => (
+          <ListItem key={article.id} article={article} />
+        ))}
+      </div>
     </>
   )
 }
