@@ -7,37 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model forum_users {
-  id               Int                @id @default(autoincrement())
-  nickname         String?            @db.VarChar(255)
-  avatar           String?            @db.VarChar(255)
-  job              String?            @db.VarChar(255)
-  introduce        String?            @db.VarChar(255)
-  forum_articles   forum_articles[]
-  forum_user_auths forum_user_auths[]
+model User {
+  id         Int        @id @default(autoincrement())
+  nickname   String?    @db.VarChar(255)
+  avatar     String?    @db.VarChar(255)
+  job        String?    @db.VarChar(255)
+  introduce  String?    @db.VarChar(255)
+  articles   Article[]
+  user_auths UserAuth[]
+
+  @@map("forum_users")
 }
 
-model forum_user_auths {
-  id            Int          @id @default(autoincrement())
+model UserAuth {
+  id            Int     @id @default(autoincrement())
   user_id       Int?
-  identity_type String?      @db.VarChar(255)
-  identifier    String?      @db.VarChar(255)
-  credential    String?      @db.VarChar(255)
-  forum_users   forum_users? @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user")
+  identity_type String? @db.VarChar(255)
+  identifier    String? @db.VarChar(255)
+  credential    String? @db.VarChar(255)
+  users         User?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user")
 
   @@index([user_id], map: "user")
+  @@map("forum_user_auths")
 }
 
-model forum_articles {
-  id          Int          @id @default(autoincrement())
-  title       String?      @db.VarChar(255)
-  content     String?      @db.Text
+model Article {
+  id          Int       @id @default(autoincrement())
+  title       String?   @db.VarChar(255)
+  content     String?   @db.Text
   views       Int?
-  is_delete   Boolean?     @db.Bit(1)
-  create_time DateTime?    @db.DateTime(0)
-  update_time DateTime?    @db.DateTime(0)
+  is_delete   Boolean?  @db.Bit(1)
+  create_time DateTime? @db.DateTime(0)
+  update_time DateTime? @db.DateTime(0)
   user_id     Int?
-  forum_users forum_users? @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "article")
+  users       User?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "article")
 
   @@index([user_id], map: "article")
+  @@map("forum_articles")
 }
