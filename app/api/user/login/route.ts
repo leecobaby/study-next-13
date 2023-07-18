@@ -15,20 +15,20 @@ export async function POST(req: NextRequest) {
   console.log(phone, verify)
   if (session.verifyCode === verify) {
     // 验证码正确，在 user_auths 表中查找 identity_type 是否有记录
-    const userAuth = await prisma.forum_user_auths.findFirst({
+    const userAuth = await prisma.userAuth.findFirst({
       where: {
         identity_type,
         identifier: phone,
         credential: verify
       },
       include: {
-        forum_users: true
+        user: true
       }
     })
 
     if (userAuth) {
       // 有记录，直接登录
-      const user = userAuth.forum_users!;
+      const user = userAuth.user!;
       session.user = { ...user, userId: user.id };
       await session.save();
       console.log(session.user)
@@ -45,11 +45,11 @@ export async function POST(req: NextRequest) {
     } else {
       // 新用户，创建用户
       const nonce = randStr(6);
-      const user = await prisma.forum_users.create({
+      const user = await prisma.user.create({
         data: {
           nickname: `用户_${nonce}`,
           avatar: `https://avatars.githubusercontent.com/u/${nonce}?v=4`,
-          forum_user_auths: {
+          user_auths: {
             create: {
               identity_type,
               identifier: phone,

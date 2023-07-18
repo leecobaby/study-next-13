@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const res = new NextResponse()
   const session = await getSession(req, res)
   const { title = '', content = '' } = await req.json()
-  const article = await prisma.forum_articles.create({
+  const article = await prisma.article.create({
     data: {
       title,
       content,
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       update_time: new Date(),
       views: 0,
       is_delete: false,
-      forum_users: {
+      user: {
         connect: {
           id: session.user?.userId,
         },
