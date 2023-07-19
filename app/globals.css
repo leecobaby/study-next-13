@@ -12,6 +12,13 @@ body {
   background-color: aliceblue;
 }
 
+.content-layout {
+  width: 1080px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

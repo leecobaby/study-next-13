@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { ListItem } from '@/components/ListItem'
+import { Divider } from '@/components/Client'
 
 export default async function Page() {
   const articles = await prisma.article.findMany({
@@ -11,9 +12,14 @@ export default async function Page() {
   return (
     <>
       <div>
-        {articles?.map(article => (
-          <ListItem key={article.id} article={article} />
-        ))}
+        <div className="content-layout">
+          {articles?.map(article => (
+            <>
+              <ListItem key={article.id} article={article} />
+              <Divider />
+            </>
+          ))}
+        </div>
       </div>
     </>
   )
