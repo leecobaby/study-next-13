@@ -8,7 +8,7 @@ export default async function Page() {
       user: true,
     },
   })
-  console.log('articles', articles)
+
   return (
     <>
       <div>

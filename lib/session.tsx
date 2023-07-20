@@ -2,7 +2,6 @@ import { getIronSession, createResponse } from 'iron-session'
 import { sessionOptions } from '@/config'
 // import { cookies, headers } from 'next/headers'
 import type { IronSession } from 'iron-session'
-import React from 'react'
 
 export interface Data {
   user?: {
@@ -41,21 +40,5 @@ export function getSession(req: Request, res: Response) {
 //   // 序列化去掉函数
 //   return { ...session }
 // }
-
-export async function fetchSession() {
-  const data = await fetch('/api/session')
-  const session = await data.json()
-  return session as Data
-}
-
-export function useSession() {
-  const [session, setSession] = React.useState<Data>()
-  React.useEffect(() => {
-    fetchSession().then(session => {
-      setSession(session)
-    })
-  }, [])
-  return session
-}
 
 export { createResponse }

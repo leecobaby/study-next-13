@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { Footer, Navbar } from '@/components'
-import { useSession } from '@/lib/session'
+import { useSession } from '@/lib/session-client'
 import { usePathname } from 'next/navigation'
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Prisma } from '@prisma/client'
 import { formatDistanceToNow } from 'date-fns'
+import { markdownToTxt } from 'markdown-to-txt'
 import { EyeOutlined, Avatar } from './Client'
 import styles from './ListItem.module.scss'
 
@@ -26,7 +27,7 @@ export function ListItem(props: Props) {
             </span>
           </div>
           <h4 className={styles.title}>{article.title}</h4>
-          <p className={styles.content}>{article.content}</p>
+          <p className={styles.content}>{markdownToTxt(article.content!)}</p>
           <div className={styles.statistics}>
             <EyeOutlined />
             <span>{article.views}</span>

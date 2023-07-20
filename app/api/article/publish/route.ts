@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
       },
     }
   })
-  console.log(article)
   if (!article) {
     return createResponse(res, JSON.stringify({ ...EXCEPTION_ARTICLE.PUBLIC_FAIL }))
   } else {

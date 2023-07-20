@@ -11,3 +11,8 @@ export function randStr(num: number) {
   }
   return str
 }
+
+// 取前N个字符
+export function getStr(str: string, num: number) {
+  return str.slice(0, num)
+}

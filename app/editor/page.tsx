@@ -19,7 +19,6 @@ export default function Page() {
   const { userId } = session?.user || {}
 
   function handlePulish() {
-    console.log('value', content)
     if (!title) {
       message.warning('请输入文章标题')
       return
