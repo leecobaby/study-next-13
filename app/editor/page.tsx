@@ -5,7 +5,7 @@ import { styled } from 'styled-components'
 import { Input, Button, message } from 'antd'
 import { type ChangeEvent, useState } from 'react'
 import { request } from '@/service'
-import { useSession } from '@/lib/session'
+import { useSession } from '@/lib/session-client'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 

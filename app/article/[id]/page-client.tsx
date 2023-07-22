@@ -10,7 +10,9 @@ export function EditLink({ id }: { id?: number }) {
   return (
     <>
       {Number(userSession?.userId) === Number(id) && (
-        <Link href={`/editor/${id}`}>编辑</Link>
+        <Link href={`/editor/${id}`}>
+          编辑
+        </Link>
       )}
     </>
   )
