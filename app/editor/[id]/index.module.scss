@@ -1,0 +1,12 @@
+.warp {
+  margin: 0 auto;
+  .operation {
+    display: flex;
+    input {
+      width: 95%;
+    }
+    button {
+      width: 5%;
+    }
+  }
+}

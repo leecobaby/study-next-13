@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const requestInstance = axios.create({
-  baseURL: '.',
+  baseURL: '/',
   timeout: 60 * 1000,
 },);
 

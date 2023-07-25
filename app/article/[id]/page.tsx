@@ -32,7 +32,7 @@ export default async function ArticleDetail({ params }: Props) {
           <div className={styles.date}>
             <div>{format(article?.update_time!, 'yyyy-MM-dd hh:mm:ss')}</div>
             <div>阅读 {article?.views}</div>
-            <EditLink id={user?.id} />
+            <EditLink id={article?.id} userId={user?.id} />
           </div>
         </div>
       </div>
