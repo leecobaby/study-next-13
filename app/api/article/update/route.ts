@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   const res = new NextResponse()
   const session = await getSession(req, res)
   const { title = '', content = '', id = 0 } = await req.json()
+  // 缺少权限判断
   const article = await prisma.article.update({
     where: {
       id

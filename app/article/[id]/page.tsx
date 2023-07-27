@@ -2,7 +2,7 @@ import MarkDwon from 'markdown-to-jsx'
 import { format } from 'date-fns'
 import { prisma } from '@/lib/prisma'
 import { Avatar } from '@/components/Client'
-import { EditLink } from './page-client'
+import { Comment, EditLink } from './page-client'
 import styles from './index.module.scss'
 import 'github-markdown-css'
 
@@ -23,20 +23,29 @@ export default async function ArticleDetail({ params }: Props) {
   const article = await getArticleDetail(Number(params.id))
   const user = article?.user
   return (
-    <div className="content-layout">
-      <h2 className={styles.title}>{article?.title}</h2>
-      <div className={styles.user}>
-        <Avatar src={user?.avatar} size={50} />
-        <div className={styles.info}>
-          <div className={styles.name}>{user?.nickname}</div>
-          <div className={styles.date}>
-            <div>{format(article?.update_time!, 'yyyy-MM-dd hh:mm:ss')}</div>
-            <div>阅读 {article?.views}</div>
-            <EditLink id={article?.id} userId={user?.id} />
+    <div>
+      <div className="content-layout">
+        <h2 className={styles.title}>{article?.title}</h2>
+        <div className={styles.user}>
+          <Avatar src={user?.avatar} size={50} />
+          <div className={styles.info}>
+            <div className={styles.name}>{user?.nickname}</div>
+            <div className={styles.date}>
+              <div>{format(article?.update_time!, 'yyyy-MM-dd hh:mm:ss')}</div>
+              <div>阅读 {article?.views}</div>
+              <EditLink id={article?.id} userId={user?.id} />
+            </div>
           </div>
         </div>
+        <MarkDwon className="markdown-body">{article?.content!}</MarkDwon>
       </div>
-      <MarkDwon className="markdown-body">{article?.content!}</MarkDwon>
+      <div className={styles.divider}></div>
+      <div className="content-layout">
+        <div className={styles.comment}>
+          <h3>评论</h3>
+          <Comment />
+        </div>
+      </div>
     </div>
   )
 }

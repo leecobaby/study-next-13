@@ -28,3 +28,22 @@
     }
   }
 }
+
+.divider {
+  margin: 10px 0;
+}
+
+.comment {
+}
+
+.enter {
+  display: flex;
+  // align-items: center;
+  .content {
+    width: 100%;
+    margin-left: 20px;
+    button {
+      margin-top: 20px;
+    }
+  }
+}

@@ -24,3 +24,10 @@ export const EXCEPTION_ARTICLE = {
     msg: '文章不存在'
   }
 }
+
+export const EXCEPTION_COMMENT = {
+  PUBLIC_FAIL: {
+    code: 4001,
+    msg: '发布评论失败'
+  }
+}

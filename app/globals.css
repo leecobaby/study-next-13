@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
 
@@ -9,14 +9,29 @@
 }
 
 body {
+  /* base */
   background-color: aliceblue;
+  /* 初始化一些样式 */
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  /* base */
+  color: #0070f3;
+  text-decoration: none;
+}
+
+a:hover {
+  /* base */
+  text-decoration: underline;
 }
 
 .content-layout {
   width: 1080px;
   margin: 0 auto;
   background-color: #fff;
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 /* @media (prefers-color-scheme: dark) {

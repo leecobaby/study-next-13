@@ -14,6 +14,7 @@ model User {
   job        String?    @db.VarChar(255)
   introduce  String?    @db.VarChar(255)
   articles   Article[]
+  comments   Comment[]
   user_auths UserAuth[]
 
   @@map("forum_users")
@@ -39,9 +40,25 @@ model Article {
   is_delete   Boolean?  @db.Bit(1)
   create_time DateTime? @db.DateTime(0)
   update_time DateTime? @db.DateTime(0)
+  comments    Comment[]
   user_id     Int?
   user        User?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "article")
 
   @@index([user_id], map: "article")
   @@map("forum_articles")
+}
+
+model Comment {
+  id          Int       @id @default(autoincrement())
+  content     String?   @db.Text
+  create_time DateTime? @db.DateTime(0)
+  update_time DateTime? @db.DateTime(0)
+  user_id     Int?
+  article_id  Int?
+  article     Article?  @relation(fields: [article_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user        User?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([article_id], map: "forum_comments_article_id_fkey")
+  @@index([user_id], map: "forum_comments_user_id_fkey")
+  @@map("forum_comments")
 }
