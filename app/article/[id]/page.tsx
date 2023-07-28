@@ -1,7 +1,7 @@
 import MarkDwon from 'markdown-to-jsx'
 import { format } from 'date-fns'
 import { prisma } from '@/lib/prisma'
-import { Avatar } from '@/components/Client'
+import { Avatar, Divider } from '@/components/Client'
 import { Comment, EditLink } from './page-client'
 import styles from './index.module.scss'
 import 'github-markdown-css'
@@ -21,7 +21,8 @@ export async function generateMetadata(props: Props) {
 
 export default async function ArticleDetail({ params }: Props) {
   const article = await getArticleDetail(Number(params.id))
-  const user = article?.user
+  console.log(article)
+  const { user, comments } = article
   return (
     <div>
       <div className="content-layout">
@@ -33,7 +34,7 @@ export default async function ArticleDetail({ params }: Props) {
             <div className={styles.date}>
               <div>{format(article?.update_time!, 'yyyy-MM-dd hh:mm:ss')}</div>
               <div>阅读 {article?.views}</div>
-              <EditLink id={article?.id} userId={user?.id} />
+              <EditLink id={article.id} userId={user?.id} />
             </div>
           </div>
         </div>
@@ -43,9 +44,13 @@ export default async function ArticleDetail({ params }: Props) {
       <div className="content-layout">
         <div className={styles.comment}>
           <h3>评论</h3>
-          <Comment />
+          <Comment id={article.id} />
         </div>
       </div>
+
+      <Divider />
+
+      <div className={styles.comment}></div>
     </div>
   )
 }
@@ -57,6 +62,11 @@ async function getArticleDetail(id: number) {
     },
     include: {
       user: true,
+      comments: {
+        include: {
+          user: true,
+        },
+      },
     },
     data: {
       views: {

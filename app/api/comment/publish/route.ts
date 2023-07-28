@@ -6,7 +6,9 @@ import { EXCEPTION_COMMENT } from '@/config'
 export async function POST(req: NextRequest) {
   const res = new NextResponse()
   const session = await getSession(req, res)
-  const { articleId = null, content = '' } = await req.json()
+  const data = await req.json()
+  const { articleId = null, content = '' } = data
+  console.log(data)
   const comment = await prisma.comment.create({
     data: {
       content,
