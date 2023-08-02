@@ -1,10 +1,17 @@
 import MarkDwon from 'markdown-to-jsx'
 import { format } from 'date-fns'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { Avatar, Divider } from '@/components/Client'
 import { Comment, EditLink } from './page-client'
 import styles from './index.module.scss'
 import 'github-markdown-css'
+
+const article = Prisma.validator<Prisma.ArticleArgs>()({
+  include: { user: true, comments: { include: { user: true } } },
+})
+export type Article = Prisma.ArticleGetPayload<typeof article>
+type Comments = Article['comments']
 
 interface Props {
   params: { id: string }
@@ -23,6 +30,7 @@ export default async function ArticleDetail({ params }: Props) {
   const article = await getArticleDetail(Number(params.id))
   console.log(article)
   const { user, comments } = article
+
   return (
     <div>
       <div className="content-layout">
@@ -44,13 +52,34 @@ export default async function ArticleDetail({ params }: Props) {
       <div className="content-layout">
         <div className={styles.comment}>
           <h3>评论</h3>
-          <Comment id={article.id} />
+          {/* 将ref传递给Comment组件 */}
+          <Comment article={article} />
         </div>
+        <Divider />
+        <CommentList comments={comments} />
       </div>
+    </div>
+  )
+}
 
-      <Divider />
-
-      <div className={styles.comment}></div>
+function CommentList({ comments }: { comments: Comments }) {
+  return (
+    <div className={styles.display}>
+      {comments.map(comment => (
+        <div key={comment.id} className={styles.warpper}>
+          <div className={styles.user}>
+            <Avatar src={comment.user?.avatar} size={40} />
+            <div className={styles.info}>
+              <div className={styles.name}>{comment.user?.nickname}</div>
+              <div className={styles.date}>
+                {format(comment.create_time!, 'yyyy-MM-dd hh:mm:ss')}
+              </div>
+              <div className={styles.content}>{comment.content}</div>
+            </div>
+          </div>
+          <Divider />
+        </div>
+      ))}
     </div>
   )
 }
@@ -65,6 +94,9 @@ async function getArticleDetail(id: number) {
       comments: {
         include: {
           user: true,
+        },
+        orderBy: {
+          create_time: 'desc',
         },
       },
     },

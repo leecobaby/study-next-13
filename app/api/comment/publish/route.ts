@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const res = new NextResponse()
   const session = await getSession(req, res)
   const data = await req.json()
-  const { articleId = null, content = '' } = data
+  const { articleId = 0, content = '' } = data
   console.log(data)
   const comment = await prisma.comment.create({
     data: {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       },
       article: {
         connect: {
-          id: Number(articleId) || undefined,
+          id: Number(articleId),
         }
       },
     }

@@ -1,10 +1,17 @@
 'use client'
-import { useState } from 'react'
+import { type RefObject, useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Avatar, Button, Input, message } from 'antd'
 import { useSession } from '@/lib/session-client'
 import styles from './index.module.scss'
 import { request } from '@/service'
+import { type Article } from './page'
+
+interface CommentProps {
+  article: Article
+  ref?: RefObject<HTMLDivElement>
+}
 
 export function EditLink({ id, userId }: { id?: number; userId?: number }) {
   const session = useSession()
@@ -20,7 +27,8 @@ export function EditLink({ id, userId }: { id?: number; userId?: number }) {
   )
 }
 
-export function Comment({ id }: { id?: number }) {
+export function Comment({ article, ref }: CommentProps) {
+  const router = useRouter()
   const session = useSession()
   const { user } = session || {}
   const [inputVal, setInputVal] = useState('')
@@ -29,13 +37,13 @@ export function Comment({ id }: { id?: number }) {
   const handleComment = () => {
     request
       .post('/api/comment/publish', {
-        articleId: id,
+        articleId: article.id,
         content: inputVal,
       })
       .then((res: any) => {
         if (res?.code === 0) {
           message.success('评论成功')
-          setInputVal('')
+          router.refresh()
         } else {
           message.error(res?.msg || '评论失败')
         }
