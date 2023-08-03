@@ -1,16 +1,15 @@
 'use client'
-import { type RefObject, useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Avatar, Button, Input, message } from 'antd'
+import { request } from '@/service'
 import { useSession } from '@/lib/session-client'
 import styles from './index.module.scss'
-import { request } from '@/service'
 import { type Article } from './page'
 
 interface CommentProps {
   article: Article
-  ref?: RefObject<HTMLDivElement>
 }
 
 export function EditLink({ id, userId }: { id?: number; userId?: number }) {
@@ -27,7 +26,7 @@ export function EditLink({ id, userId }: { id?: number; userId?: number }) {
   )
 }
 
-export function Comment({ article, ref }: CommentProps) {
+export function Comment({ article }: CommentProps) {
   const router = useRouter()
   const session = useSession()
   const { user } = session || {}

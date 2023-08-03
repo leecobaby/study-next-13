@@ -7,10 +7,10 @@ import { Comment, EditLink } from './page-client'
 import styles from './index.module.scss'
 import 'github-markdown-css'
 
-const article = Prisma.validator<Prisma.ArticleArgs>()({
+const articleStruct = Prisma.validator<Prisma.ArticleArgs>()({
   include: { user: true, comments: { include: { user: true } } },
 })
-export type Article = Prisma.ArticleGetPayload<typeof article>
+export type Article = Prisma.ArticleGetPayload<typeof articleStruct>
 type Comments = Article['comments']
 
 interface Props {
@@ -52,7 +52,6 @@ export default async function ArticleDetail({ params }: Props) {
       <div className="content-layout">
         <div className={styles.comment}>
           <h3>评论</h3>
-          {/* 将ref传递给Comment组件 */}
           <Comment article={article} />
         </div>
         <Divider />
