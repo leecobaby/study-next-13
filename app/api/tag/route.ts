@@ -6,7 +6,11 @@ import { EXCEPTION_COMMENT } from '@/config'
 export async function GET(req: NextRequest) {
   const res = new NextResponse()
   const session = await getSession(req, res)
-  const allTags = await prisma.tag.findMany()
+  const allTags = await prisma.tag.findMany({
+    include: {
+      users: true
+    }
+  })
   const userTags = await prisma.user.findUnique({
     where: {
       id: session?.user?.userId

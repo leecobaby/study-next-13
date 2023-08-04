@@ -1,21 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Button, Tabs } from 'antd'
-import Icon from '@ant-design/icons'
+import { useRouter } from 'next/navigation'
+import { Button, Tabs, message } from 'antd'
 import * as Icons from '@ant-design/icons'
-import { Prisma } from '@prisma/client'
 import { useSession } from '@/lib/session-client'
 import { request } from '@/service'
+import { TagType, Tag } from '@/types'
 import styles from './index.module.scss'
-
-const tagStruct = Prisma.validator<Prisma.TagArgs>()({
-  include: {
-    users: true,
-    articles: true,
-  },
-})
-
-export type Tag = Prisma.TagGetPayload<typeof tagStruct>
 
 export default function Page() {
   return (
@@ -29,8 +20,10 @@ export default function Page() {
 export function Tag() {
   const [followTags, setFollowTags] = useState<Tag[]>([])
   const [allTags, setAllTags] = useState<Tag[]>([])
+  const [refresh, setRefresh] = useState(false)
   const session = useSession()
   const user = session?.user
+  const router = useRouter()
 
   useEffect(() => {
     if (user) {
@@ -42,24 +35,32 @@ export function Tag() {
         }
       })
     }
-  }, [user])
+  }, [user, refresh])
 
   const handleUnFollow = (tagId: number) => {
-    request.post('/api/tag/unfollow', { tagId }).then((res: any) => {
-      if (res?.code === 0) {
-        const newFollowTags = followTags.filter(t => t.id !== tagId)
-        setFollowTags(newFollowTags)
-      }
-    })
+    request
+      .post('/api/tag/follow', { tagId, type: TagType.UnFollow })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          message.success('取消关注成功')
+          setRefresh(!refresh)
+        } else {
+          message.error(res?.msg || '取消关注失败')
+        }
+      })
   }
 
   const handleFollow = (tagId: number) => {
-    request.post('/api/tag/follow', { tagId }).then((res: any) => {
-      if (res?.code === 0) {
-        const newFollowTags = [...followTags, res.data]
-        setFollowTags(newFollowTags)
-      }
-    })
+    request
+      .post('/api/tag/follow', { tagId, type: TagType.Follow })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          message.success('关注成功')
+          setRefresh(!refresh)
+        } else {
+          message.error(res?.msg || '关注失败')
+        }
+      })
   }
 
   return (
@@ -74,23 +75,17 @@ export function Tag() {
               <div className={styles.tags}>
                 {followTags.map(tag => (
                   <div key={tag.title} className={styles.tagWrapper}>
-                    <div>{Icons[tag.icon!].render()}</div>
+                    <div>{(Icons as any)[tag.icon!].render()}</div>
                     <div className={styles.title}>{tag.title}</div>
                     <div>
                       {tag.follow_count} 关注 {tag.article_count} 文章
                     </div>
-                    {tag.users?.find(u => u.id === user?.userId) ? (
-                      <Button
-                        type="primary"
-                        onClick={() => handleUnFollow(tag.id)}
-                      >
-                        已关注
-                      </Button>
-                    ) : (
-                      <Button onClick={() => handleUnFollow(tag.id)}>
-                        关注
-                      </Button>
-                    )}
+                    <Button
+                      type="primary"
+                      onClick={() => handleUnFollow(tag.id)}
+                    >
+                      已关注
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -103,7 +98,7 @@ export function Tag() {
               <div className={styles.tags}>
                 {allTags.map(tag => (
                   <div key={tag.title} className={styles.tagWrapper}>
-                    <div>{Icons[tag.icon!].render()}</div>
+                    <div>{(Icons as any)[tag.icon!].render()}</div>
                     <div className={styles.title}>{tag.title}</div>
                     <div>
                       {tag.follow_count} 关注 {tag.article_count} 文章
@@ -116,9 +111,7 @@ export function Tag() {
                         已关注
                       </Button>
                     ) : (
-                      <Button onClick={() => handleUnFollow(tag.id)}>
-                        关注
-                      </Button>
+                      <Button onClick={() => handleFollow(tag.id)}>关注</Button>
                     )}
                   </div>
                 ))}

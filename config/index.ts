@@ -7,7 +7,10 @@ export const sessionOptions = {
 }
 
 export const EXCEPTION_USER = {
-
+  NOT_LOGIN: {
+    code: 1001,
+    msg: '未登录'
+  },
 }
 
 export const EXCEPTION_ARTICLE = {
@@ -22,6 +25,13 @@ export const EXCEPTION_ARTICLE = {
   NOT_FOUND: {
     code: 2003,
     msg: '文章不存在'
+  }
+}
+
+export const EXCEPTION_TAG = {
+  FOLLOW_FAIL: {
+    code: 3001,
+    msg: '关注/取关操作失败'
   }
 }
 
