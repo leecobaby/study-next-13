@@ -1,18 +1,21 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Button, Tabs, message } from 'antd'
+import { useRouter } from 'next/navigation'
+import { Button, Tabs, message, Avatar, Divider } from 'antd'
 import * as Icons from '@ant-design/icons'
+import { CodeOutlined, FireOutlined, FundOutlined } from '@ant-design/icons'
 import { useSession } from '@/lib/session-client'
 import { request } from '@/service'
 import { TagType, Tag } from '@/types'
 import styles from './index.module.scss'
 
-export default function Page() {
+export function UserDetail() {
   const [followTags, setFollowTags] = useState<Tag[]>([])
   const [allTags, setAllTags] = useState<Tag[]>([])
   const [refresh, setRefresh] = useState(false)
   const session = useSession()
   const user = session?.user
+  const router = useRouter()
 
   useEffect(() => {
     if (user) {
@@ -117,3 +120,6 @@ export default function Page() {
     </div>
   )
 }
+
+export { CodeOutlined, FireOutlined, FundOutlined }
+export { Button, Tabs, message, Avatar, Divider }

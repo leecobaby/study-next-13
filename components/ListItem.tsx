@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Prisma } from '@prisma/client'
+import { Article, Prisma } from '@prisma/client'
 import { formatDistanceToNow } from 'date-fns'
 import { markdownToTxt } from 'markdown-to-txt'
 import { EyeOutlined, Avatar } from './Client'
