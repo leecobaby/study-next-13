@@ -20,6 +20,10 @@ async function getArticleDetail(id: number) {
     where: {
       id,
     },
+    include: {
+      tags: true,
+      user: true,
+    },
   })
   return article
 }

@@ -6,7 +6,7 @@ import { EXCEPTION_ARTICLE } from '@/config'
 export async function POST(req: NextRequest) {
   const res = new NextResponse()
   const session = await getSession(req, res)
-  const { title = '', content = '' } = await req.json()
+  const { title = '', content = '', tagIds = [] } = await req.json()
   const article = await prisma.article.create({
     data: {
       title,
@@ -20,8 +20,25 @@ export async function POST(req: NextRequest) {
           id: session.user?.userId,
         },
       },
+      tags: {
+        connect: tagIds.map((id: number) => ({ id })),
+      },
     }
   })
+
+  prisma.tag.updateMany({
+    where: {
+      id: {
+        in: tagIds
+      }
+    },
+    data: {
+      article_count: {
+        increment: 1
+      }
+    }
+  })
+
   if (!article) {
     return createResponse(res, JSON.stringify({ ...EXCEPTION_ARTICLE.PUBLIC_FAIL }))
   } else {

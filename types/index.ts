@@ -13,3 +13,12 @@ export enum TagType {
   Follow,
   UnFollow,
 }
+
+export const articleStruct = Prisma.validator<Prisma.ArticleArgs>()({
+  include: {
+    user: true,
+    tags: true,
+  },
+})
+
+export type Article = Prisma.ArticleGetPayload<typeof articleStruct>

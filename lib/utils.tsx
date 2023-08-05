@@ -16,3 +16,8 @@ export function randStr(num: number) {
 export function getStr(str: string, num: number) {
   return str.slice(0, num)
 }
+
+// 字符串匹配无视大小写
+export function matchStr(str: string, matchStr: string) {
+  return str.toLowerCase().includes(matchStr.toLowerCase())
+}

@@ -2,8 +2,10 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { styled } from 'styled-components'
-import { Input, Button, message } from 'antd'
-import { type ChangeEvent, useState } from 'react'
+import { Input, Button, message, Select } from 'antd'
+import { type ChangeEvent, useState, useEffect } from 'react'
+import { Tag } from '@/types'
+import { matchStr } from '@/lib/utils'
 import { request } from '@/service'
 import { useSession } from '@/lib/session-client'
 import '@uiw/react-md-editor/markdown-editor.css'
@@ -14,9 +16,19 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 export default function Page() {
   const [content, setContent] = useState('**Hello world!!!**')
   const [title, setTitle] = useState('')
+  const [allTags, setAllTags] = useState<Tag[]>([])
+  const [tagIds, setTagIds] = useState([])
   const router = useRouter()
   const session = useSession()
   const { userId } = session?.user || {}
+
+  useEffect(() => {
+    request.get('/api/tag').then((res: any) => {
+      if (res?.code === 0) {
+        setAllTags(res?.data?.allTags || [])
+      }
+    })
+  }, [])
 
   function handlePulish() {
     if (!title) {
@@ -27,6 +39,7 @@ export default function Page() {
       .post('/api/article/publish', {
         title,
         content,
+        tagIds,
       })
       .then((res: any) => {
         if (res?.code === 0) {
@@ -46,6 +59,10 @@ export default function Page() {
   function handleContentChange(content: any) {
     setContent(content)
   }
+
+  function handleSelectTag(value: []) {
+    setTagIds(value)
+  }
   return (
     <Warp>
       <div className="operation">
@@ -54,6 +71,18 @@ export default function Page() {
           value={title}
           onChange={handleTitleChange}
         ></Input>
+        <Select
+          className="tag"
+          mode="multiple"
+          placeholder="请选择标签"
+          allowClear
+          onChange={handleSelectTag}
+          options={allTags.map(tag => ({
+            label: tag.title,
+            value: tag.id,
+          }))}
+          filterOption={(input, option) => matchStr(input, option?.label ?? '')}
+        />
         <Button type="primary" onClick={handlePulish}>
           发布
         </Button>
@@ -67,11 +96,12 @@ const Warp = styled.div`
   margin: 0 auto;
   .operation {
     display: flex;
+    width: 100%;
     input {
-      width: 95%;
+      width: 80%;
     }
-    button {
-      width: 5%;
+    .tag {
+      width: 15%;
     }
   }
 `
