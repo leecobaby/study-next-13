@@ -1,9 +1,7 @@
 'use client'
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { Button, Tabs, message, Avatar, Divider, Form, Input } from 'antd'
+import { Button, message, Form, Input } from 'antd'
 import { request } from '@/service'
-import { prisma } from '@/lib/prisma'
 import styles from './index.module.scss'
 
 export default function Page() {
@@ -15,10 +13,9 @@ export default function Page() {
         form.setFieldsValue(res.data?.userInfo)
       }
     })
-  }, [])
+  }, [form])
 
   const handleSubmit = async (values: any) => {
-    console.log(values)
     request.post('/api/user/update', values).then((res: any) => {
       if (res?.code === 0) {
         message.success('保存成功')

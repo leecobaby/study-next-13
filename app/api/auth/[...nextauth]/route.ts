@@ -49,7 +49,7 @@ const options: NextAuthOptions = {
 // const handler = NextAuth(options);
 
 
-async function auth(req, res) {
+async function auth(req:any, res:any) {
   // const { to = '', templateId = TemplateId } = await req.json();
   // const NowDate = format(new Date(), 'yyyyMMddHHmmss')
   // console.log(NowDate)
