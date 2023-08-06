@@ -12,7 +12,6 @@ interface Props {
 }
 
 export default async function Page({ params }: Props) {
-  console.log('params', params)
   const { id } = params
   const user = await prisma.user.findUnique({
     where: {
@@ -26,7 +25,6 @@ export default async function Page({ params }: Props) {
       },
     },
   })
-  console.log(user)
   const articles = user?.articles
   const viewsTotal = articles?.reduce((acc, cur) => acc + (cur.views ?? 0), 0)
 
