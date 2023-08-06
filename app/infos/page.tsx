@@ -12,21 +12,10 @@ export default async function Page() {
   )
   const json2 = await res2.json()
 
-  // await Timer(10)
-
   return (
     <>
       <h1>Next stars: {json?.stargazers_count}</h1>
       <h1>Time: {json2?.datetime}</h1>
     </>
   )
-}
-
-// 返回一个 promise
-function Timer(m: number) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('hello')
-    }, m * 1000)
-  })
 }

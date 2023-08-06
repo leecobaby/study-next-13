@@ -1,13 +1,10 @@
+import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { ListItem } from '@/components/ListItem'
 import { Divider } from '@/components/Client'
 
 export default async function Page() {
-  const articles = await prisma.article.findMany({
-    include: {
-      user: true,
-    },
-  })
+  const articles = await getActicles()
 
   return (
     <>
@@ -23,4 +20,15 @@ export default async function Page() {
       </div>
     </>
   )
+}
+
+function getActicles() {
+  return cache(async () => {
+    const articles = await prisma.article.findMany({
+      include: {
+        user: true,
+      },
+    })
+    return articles
+  })()
 }

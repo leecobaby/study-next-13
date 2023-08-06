@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     }
   })
 
-  prisma.tag.updateMany({
+  await prisma.tag.updateMany({
     where: {
       id: {
         in: tagIds
