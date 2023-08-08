@@ -1,4 +1,3 @@
-import { cache } from 'react'
 import { prisma } from '@/lib/prisma'
 import { ListItem } from '@/components/ListItem'
 import { Divider } from '@/components/Client'

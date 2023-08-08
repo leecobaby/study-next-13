@@ -1,3 +1,5 @@
+import styles from './index.module.scss'
+
 type Respository = {
   stargazers_count: number
 }
@@ -14,7 +16,7 @@ export default async function Page() {
 
   return (
     <>
-      <h1>Next stars: {json?.stargazers_count}</h1>
+      <h1 className={styles.hello}>Next stars: {json?.stargazers_count}</h1>
       <h1>Time: {json2?.datetime}</h1>
     </>
   )
